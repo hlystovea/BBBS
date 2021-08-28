@@ -34,6 +34,15 @@ class Catalog(models.Model, ImageFromUrlMixin):
             'Альтернативный способ загрузки изображения. Приоритет у файла.'
         ),
     )
+    image_caption = models.CharField(
+        verbose_name=_('Подпись к изображению'),
+        max_length=200,
+        blank=True,
+        null=True,
+        help_text=_(
+            'Отображается под изображением.'
+        ),
+    )
     body = MartorField(
         verbose_name=_('Текст статьи'),
         help_text=_(

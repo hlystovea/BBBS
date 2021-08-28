@@ -28,7 +28,7 @@ class Movie(models.Model, ImageFromUrlMixin):
         verbose_name=_('Заголовок'),
         max_length=128,
     )
-    info = models.TextField(
+    info = models.CharField(
         verbose_name=_('Информация'),
         max_length=512,
     )

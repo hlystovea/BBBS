@@ -2,13 +2,15 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from martor.models import MartorField
 
 from ..validators import file_size_validator, image_extension_validator
+from .mixins import ImageFromUrlMixin
 
 User = get_user_model()
 
 
-class History(models.Model):
+class History(models.Model, ImageFromUrlMixin):
     title = models.CharField(
         verbose_name=_('Заголовок'),
         max_length=200,
@@ -33,13 +35,32 @@ class History(models.Model):
         help_text=settings.IMAGE_FIELD_HELP_TEXT,
         validators=[file_size_validator, image_extension_validator],
     )
-    description = models.TextField(
-        verbose_name=_('Текст истории'),
+    image_url = models.URLField(
+        verbose_name=_('Ссылка на изображение'),
+        max_length=192,
+        help_text=_(
+            'Альтернативный способ загрузки изображения. Приоритет у файла.'
+        ),
     )
-    raw_html = models.TextField(
-        verbose_name=_('HTML'),
-        max_length=4 * 10 ** 6,
-        help_text=_('Поле для html кода страницы.'),
+    description = models.TextField(
+        verbose_name=_('Верхний абзац'),
+        max_length=1024,
+        help_text=_(
+            'Отображается над основным текстом статьи.'
+        ),
+    )
+    uper_body = MartorField(
+        verbose_name=_('Текст статьи над слайдером'),
+        help_text=_(
+            'Текст статьи над слайдером с изображениями. '
+            'Для выделения абзаца используйте блок Quote (Ctrl + Q).'
+        ),
+    )
+    lower_body = MartorField(
+        verbose_name=_('Текст статьи под слайдером'),
+        help_text=_(
+            'Текст статьи под слайдером с изображениями. '
+        ),
     )
     output_to_main = models.BooleanField(
         verbose_name=_('Отображать на главной странице'),
@@ -63,6 +84,32 @@ class History(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        self.raw_html = ' '.join(self.raw_html.split())
+    def save(self, *args, **kwargs) -> None:
+        if self.image_url and not self.image:
+            self.load_image(image_url=self.image_url)
         return super().save(*args, **kwargs)
+
+
+class HistoryImage(models.Model):
+    history = models.ForeignKey(
+        History,
+        verbose_name=_('История'),
+        related_name='images',
+        on_delete=models.CASCADE,
+    )
+    image = models.ForeignKey(
+        'common.Image',
+        verbose_name=_('Изображение'),
+        related_name='histories',
+        on_delete=models.PROTECT,
+    )
+    order = models.PositiveSmallIntegerField(
+        verbose_name=_('Порядок вывода'),
+        default=0,
+    )
+
+    class Meta:
+        app_label = 'api'
+        ordering = ('order',)
+        verbose_name = _('Изображение в слайдере')
+        verbose_name_plural = _('Изображения в слайдере')

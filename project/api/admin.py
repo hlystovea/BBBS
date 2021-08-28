@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.db.models import CharField, TextField
+from django.forms import Textarea, TextInput
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.http import urlencode
@@ -29,6 +31,11 @@ class ImageTagField(admin.ModelAdmin):
 class MixinAdmin(admin.ModelAdmin):
     empty_value_display = _('-пусто-')
     ordering = ('-id',)
+    formfield_overrides = {
+        CharField: {'widget': TextInput(attrs={'size': 80})},
+        TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
+        MartorField: {'widget': AdminMartorWidget},
+    }
 
 
 @admin.register(models.ActivityType)
@@ -72,9 +79,6 @@ class BookAdmin(MixinAdmin):
 class CatalogAdmin(ImageTagField, MixinAdmin):
     list_display = ('id', 'title', 'image_tag')
     search_fields = ('title', )
-    formfield_overrides = {
-        MartorField: {'widget': AdminMartorWidget},
-    }
 
 
 @admin.register(models.City)
@@ -139,12 +143,19 @@ class EventAdmin(MixinAdmin):
         return obj.end_at.strftime('%Y-%m-%d %H:%M')
 
 
+class HistoryImageInline(admin.TabularInline):
+    model = models.HistoryImage
+    min_num = 4
+    extra = 0
+
+
 @admin.register(models.History)
 class HistoryAdmin(ImageTagField, MixinAdmin):
     list_display = ('id', 'title', 'mentor', 'child',
                     'output_to_main', 'image_tag')
     search_fields = ('title', 'description')
     list_filter = ('output_to_main', )
+    inlines = [HistoryImageInline]
 
 
 @admin.register(models.Movie)
