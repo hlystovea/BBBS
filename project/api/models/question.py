@@ -3,11 +3,11 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Question(models.Model):
-    title = models.CharField(
-        verbose_name=_('Заголовок'),
+    title = models.TextField(
+        verbose_name=_('Вопрос'),
         max_length=500,
     )
-    answer = models.CharField(
+    answer = models.TextField(
         max_length=2048,
         verbose_name=_('Ответ'),
         blank=True,

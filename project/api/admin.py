@@ -31,6 +31,11 @@ class ImageTagField(admin.ModelAdmin):
 class MixinAdmin(admin.ModelAdmin):
     empty_value_display = _('-пусто-')
     ordering = ('-id',)
+    formfield_overrides = {
+        CharField: {'widget': TextInput(attrs={'size': 80})},
+        TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
+        MartorField: {'widget': AdminMartorWidget},
+    }
 
 
 @admin.register(models.ActivityType)
@@ -74,9 +79,6 @@ class BookAdmin(MixinAdmin):
 class CatalogAdmin(ImageTagField, MixinAdmin):
     list_display = ('id', 'title', 'image_tag')
     search_fields = ('title', )
-    formfield_overrides = {
-        MartorField: {'widget': AdminMartorWidget},
-    }
 
 
 @admin.register(models.City)
@@ -210,11 +212,6 @@ class RightAdmin(MixinAdmin):
     list_display = ('id', 'title', 'get_description')
     search_fields = ('title', 'description', 'text')
     list_filter = ('tags', )
-    formfield_overrides = {
-        CharField: {'widget': TextInput(attrs={'size': 100})},
-        TextField: {'widget': Textarea(attrs={'rows': 6, 'cols': 100})},
-        MartorField: {'widget': AdminMartorWidget},
-    }
 
     @admin.display(description=_('Описание'))
     def get_description(self, obj):
