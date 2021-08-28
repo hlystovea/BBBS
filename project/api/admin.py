@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.db.models import CharField, TextField
+from django.forms import Textarea, TextInput
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.http import urlencode
@@ -208,6 +210,11 @@ class RightAdmin(MixinAdmin):
     list_display = ('id', 'title', 'get_description')
     search_fields = ('title', 'description', 'text')
     list_filter = ('tags', )
+    formfield_overrides = {
+        CharField: {'widget': TextInput(attrs={'size': 100})},
+        TextField: {'widget': Textarea(attrs={'rows': 6, 'cols': 100})},
+        MartorField: {'widget': AdminMartorWidget},
+    }
 
     @admin.display(description=_('Описание'))
     def get_description(self, obj):

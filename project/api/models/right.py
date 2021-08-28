@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from martor.models import MartorField
 
 from .mixins import ImageFromUrlMixin
 
@@ -9,17 +10,19 @@ class Right(models.Model, ImageFromUrlMixin):
         verbose_name=_('Заголовок'),
         max_length=200,
     )
-    description = models.CharField(
-        verbose_name=_('Описание'),
-        max_length=500,
+    description = models.TextField(
+        verbose_name=_('Верхний абзац'),
+        max_length=1024,
+        help_text=_(
+            'Отображается над основным текстом статьи.'
+        ),
     )
-    text = models.TextField(
-        verbose_name=_('Текст'),
-    )
-    raw_html = models.TextField(
-        verbose_name=_('HTML'),
-        max_length=4 * 10 ** 6,
-        help_text=_('Поле для html кода страницы.'),
+    body = MartorField(
+        verbose_name=_('Текст статьи'),
+        help_text=_(
+            'Основной текст статьи. '
+            'Для покраски абзаца используйте блок Quote (Ctrl + Q).'
+        ),
     )
     tags = models.ManyToManyField(
         'api.Tag',
