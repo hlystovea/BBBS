@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'account',
     'admin_honeypot',
     'martor',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -116,6 +117,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
+
+PHONENUMBER_DEFAULT_REGION = 'RU'
 
 LANGUAGE_CODE = ENV.get('LANGUAGE_CODE', default='ru-Ru')
 

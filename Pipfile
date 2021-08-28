@@ -41,6 +41,8 @@ MarkupSafe = "==2.0.1"
 apscheduler = "*"
 django-apscheduler = "*"
 martor = "*"
+django-phonenumber-field = {extras = ["phonenumberslite"], version = "*"}
+babel = "*"
 
 [dev-packages]
 pytest = "*"

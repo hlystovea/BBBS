@@ -152,7 +152,7 @@ class Migration(migrations.Migration):
             name='Participant',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.event', validators=[api.validators.events_lifetime_validator, api.validators.free_seats_validators])),
+                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.event', validators=[api.validators.event_lifetime_validator, api.validators.free_seats_validator])),
                 ('participant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={

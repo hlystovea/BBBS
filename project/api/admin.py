@@ -6,6 +6,8 @@ from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 from martor.models import MartorField
 from martor.widgets import AdminMartorWidget
+from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
 from . import forms, models
 
@@ -27,16 +29,6 @@ class ImageTagField(admin.ModelAdmin):
 class MixinAdmin(admin.ModelAdmin):
     empty_value_display = _('-пусто-')
     ordering = ('-id',)
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == 'tags':
-            kwargs['queryset'] = models.Tag.objects.filter(
-                category=self.model._meta.verbose_name_plural
-            )
-        return super(
-            MixinAdmin,
-            self
-        ).formfield_for_manytomany(db_field, request, **kwargs)
 
 
 @admin.register(models.ActivityType)
@@ -105,8 +97,11 @@ class DiaryAdmin(ImageTagField, MixinAdmin):
 class EventAdmin(MixinAdmin):
     list_display = ('id', 'title', 'get_start_at',
                     'get_end_at', 'city', 'taken_seats', 'seats')
-    list_filter = ('city', 'tags')
+    list_filter = ('city', 'tags', 'canceled')
     search_fields = ('title', 'contact', 'address', 'description')
+    formfield_overrides = {
+        PhoneNumberField: {'widget': PhoneNumberInternationalFallbackWidget},
+    }
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -119,10 +114,6 @@ class EventAdmin(MixinAdmin):
         if (db_field.name == 'city'
                 and not user.has_perm('api.events_in_all_cities')):
             kwargs['queryset'] = models.City.objects.filter(region=user.region)
-        if db_field.name == 'tags':
-            kwargs['queryset'] = models.Tag.objects.filter(
-                category=self.model._meta.verbose_name_plural
-            )
         return super(
             EventAdmin,
             self
