@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.functions import Extract
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
 
 from ..validators import events_lifetime_validator, free_seats_validators
 
@@ -25,6 +26,9 @@ class Event(models.Model):
     contact = models.CharField(
         verbose_name=_('Контактное лицо'),
         max_length=200,
+    )
+    phone_number = PhoneNumberField(
+        verbose_name=_('Контактный телефон'),
     )
     title = models.CharField(
         verbose_name=_('Заголовок'),
@@ -56,7 +60,7 @@ class Event(models.Model):
         verbose_name=_('Тег'),
         related_name='events',
         on_delete=models.PROTECT,
-        limit_choices_to={'category': 'События'},
+        limit_choices_to={'category': 'Календарь'},
     )
 
     class Meta:
