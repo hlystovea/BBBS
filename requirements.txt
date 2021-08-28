@@ -20,6 +20,8 @@ asgiref==3.3.4
 
 autopep8==1.5.7
 
+babel==2.9.1
+
 certifi==2021.5.30
 
 charset-normalizer==2.0.0
@@ -35,6 +37,8 @@ django-apscheduler==0.6.0
 django-cors-headers==3.7.0
 
 django-filter==2.4.0
+
+django-phonenumber-field[phonenumberslite]==5.2.0
 
 django==3.2.3
 
@@ -63,6 +67,8 @@ markupsafe==2.0.1
 martor==1.6.4
 
 packaging==21.0; python_version >= '3.6'
+
+phonenumberslite==8.12.31
 
 pillow==8.3.1
 
