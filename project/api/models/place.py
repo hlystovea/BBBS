@@ -103,7 +103,7 @@ class Place(models.Model, ImageFromUrlMixin):
         to='api.Tag',
         verbose_name=_('Тег(и)'),
         related_name='places',
-        limit_choices_to={'category': 'Места'},
+        limit_choices_to={'category': 'Куда пойти'},
     )
 
     class Meta:
