@@ -143,12 +143,19 @@ class EventAdmin(MixinAdmin):
         return obj.end_at.strftime('%Y-%m-%d %H:%M')
 
 
+class HistoryImageInline(admin.TabularInline):
+    model = models.HistoryImage
+    min_num = 4
+    extra = 0
+
+
 @admin.register(models.History)
 class HistoryAdmin(ImageTagField, MixinAdmin):
     list_display = ('id', 'title', 'mentor', 'child',
                     'output_to_main', 'image_tag')
     search_fields = ('title', 'description')
     list_filter = ('output_to_main', )
+    inlines = [HistoryImageInline]
 
 
 @admin.register(models.Movie)

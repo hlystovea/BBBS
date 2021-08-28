@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'api',
     'account',
+    'common',
     'admin_honeypot',
     'martor',
     'phonenumber_field',

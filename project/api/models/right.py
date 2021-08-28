@@ -39,7 +39,3 @@ class Right(models.Model, ImageFromUrlMixin):
 
     def __str__(self):
         return self.title
-
-    def save(self, *args, **kwargs):
-        self.raw_html = ' '.join(self.raw_html.split())
-        return super().save(*args, **kwargs)

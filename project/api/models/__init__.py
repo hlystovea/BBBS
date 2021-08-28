@@ -6,7 +6,7 @@ from .catalog import Catalog
 from .city import City
 from .diary import Diary
 from .event import Event, Participant
-from .history import History
+from .history import History, HistoryImage
 from .movie import Movie
 from .place import Place
 from .question import Question
@@ -26,6 +26,7 @@ __all__ = [
     'Event',
     'Participant',
     'History',
+    'HistoryImage',
     'Question',
     'Place',
     'Right',

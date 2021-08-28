@@ -1,19 +1,26 @@
 from rest_framework import validators
+from rest_framework import serializers
 from rest_framework.serializers import CurrentUserDefault, ImageField
 
-from ..models import History
+from ..models import History, HistoryImage
 from .base import BaseSerializer
 from .profile import MentorSerializer
 
 
+class HistoryImageSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='image.id')
+    image = serializers.ImageField(source='image.image')
+    image_caption = serializers.CharField(source='image.image_caption')
+
+    class Meta:
+        fields = ['id', 'image', 'image_caption']
+        model = HistoryImage
+
+
 class HistorySerializer(BaseSerializer):
     mentor = MentorSerializer(default=CurrentUserDefault())
-    image = ImageField(
-        max_length=None,
-        allow_empty_file=False,
-        use_url=False,
-        required=False,
-    )
+    image = ImageField()
+    images = HistoryImageSerializer(many=True)
 
     class Meta(BaseSerializer.Meta):
         tags = None
