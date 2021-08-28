@@ -1,27 +1,25 @@
-from rest_framework import validators
-from rest_framework.serializers import CurrentUserDefault, ImageField
+from rest_framework import serializers
+from rest_framework.serializers import ImageField
 
-from ..models import History
-from .base import BaseSerializer
+from ..models import History, HistoryImage
 from .profile import MentorSerializer
 
 
-class HistorySerializer(BaseSerializer):
-    mentor = MentorSerializer(default=CurrentUserDefault())
-    image = ImageField(
-        max_length=None,
-        allow_empty_file=False,
-        use_url=False,
-        required=False,
-    )
+class HistoryImageSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='image.id')
+    image = serializers.ImageField(source='image.image', use_url=False)
+    image_caption = serializers.CharField(source='image.image_caption')
 
-    class Meta(BaseSerializer.Meta):
-        tags = None
+    class Meta:
+        fields = ['id', 'image', 'image_caption']
+        model = HistoryImage
+
+
+class HistorySerializer(serializers.ModelSerializer):
+    mentor = MentorSerializer()
+    image = ImageField(use_url=False)
+    images = HistoryImageSerializer(many=True)
+
+    class Meta:
         model = History
-        validators = [
-            validators.UniqueTogetherValidator(
-                queryset=History.objects.all(),
-                fields=['mentor', 'child'],
-                message='Такая пара наставник - ребенок уже добавлена'
-            )
-        ]
+        exclude = ['output_to_main', 'image_url']
