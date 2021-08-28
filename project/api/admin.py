@@ -97,7 +97,7 @@ class DiaryAdmin(ImageTagField, MixinAdmin):
 class EventAdmin(MixinAdmin):
     list_display = ('id', 'title', 'get_start_at',
                     'get_end_at', 'city', 'taken_seats', 'seats')
-    list_filter = ('city', 'tags')
+    list_filter = ('city', 'tags', 'canceled')
     search_fields = ('title', 'contact', 'address', 'description')
     formfield_overrides = {
         PhoneNumberField: {'widget': PhoneNumberInternationalFallbackWidget},

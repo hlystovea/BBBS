@@ -7,7 +7,8 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
-from ..validators import events_lifetime_validator, free_seats_validators
+from ..validators import (event_lifetime_validator,
+                          free_seats_validator, event_canceled_validator)
 
 User = get_user_model()
 
@@ -62,6 +63,14 @@ class Event(models.Model):
         on_delete=models.PROTECT,
         limit_choices_to={'category': 'Календарь'},
     )
+    canceled = models.BooleanField(
+        verbose_name=_('Отметка об отмене события'),
+        default=False,
+        help_text=_(
+            'События с этой меткой помечаются как "Отмененные", '
+            'запись на них становится недоступной.'
+        )
+    )
 
     class Meta:
         app_label = 'api'
@@ -109,8 +118,9 @@ class Participant(models.Model):
         Event,
         on_delete=models.CASCADE,
         validators=[
-            events_lifetime_validator,
-            free_seats_validators,
+            event_lifetime_validator,
+            free_seats_validator,
+            event_canceled_validator,
         ]
     )
     participant = models.ForeignKey(

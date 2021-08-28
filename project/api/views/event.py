@@ -39,18 +39,29 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
         user = self.request.user
         booked = Event.objects.filter(pk=OuterRef('pk'), participants=user)
         remain_seats = F('seats') - Count('participants')
-        return Event.objects.filter(city=user.city) \
-                            .filter(end_at__gt=now()) \
-                            .annotate(booked=Exists(booked)) \
-                            .annotate(remain_seats=remain_seats) \
-                            .order_by('start_at')
+        return Event.objects.filter(
+            city=user.city
+        ).filter(
+            end_at__gt=now()
+        ).annotate(
+            booked=Exists(booked)
+        ).annotate(
+            remain_seats=remain_seats
+        ).order_by(
+            'start_at'
+        )
 
     @action(methods=['get'], detail=False)
     def months(self, request):
         user = request.user
-        dates = Event.objects.filter(city=user.city) \
-                             .filter(end_at__gt=now()) \
-                             .dates('start_at', 'month')
+        dates = Event.objects.filter(
+            city=user.city
+        ).filter(
+            end_at__gt=now()
+        ).dates(
+            'start_at',
+            'month',
+        )
         months = list(set([date.month for date in dates]))
         months.sort()
         date = Date(months=months)
@@ -78,9 +89,13 @@ class ParticipantViewSet(ListCreateDelViewSet):
         return ParticipantWriteSerializer
 
     def get_queryset(self):
-        return Participant.objects.filter(participant=self.request.user) \
-                                  .filter(event__end_at__gt=now()) \
-                                  .order_by('event__start_at')
+        return Participant.objects.filter(
+            participant=self.request.user
+        ).filter(
+            event__end_at__gt=now()
+        ).order_by(
+            'event__start_at'
+        )
 
     def destroy(self, request, pk=None):
         instance = get_object_or_404(
