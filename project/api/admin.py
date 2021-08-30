@@ -1,11 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.db.models import CharField, TextField
+from django.forms import Textarea, TextInput
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 from martor.models import MartorField
 from martor.widgets import AdminMartorWidget
+from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
 from . import forms, models
 
@@ -27,16 +31,11 @@ class ImageTagField(admin.ModelAdmin):
 class MixinAdmin(admin.ModelAdmin):
     empty_value_display = _('-пусто-')
     ordering = ('-id',)
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == 'tags':
-            kwargs['queryset'] = models.Tag.objects.filter(
-                category=self.model._meta.verbose_name_plural
-            )
-        return super(
-            MixinAdmin,
-            self
-        ).formfield_for_manytomany(db_field, request, **kwargs)
+    formfield_overrides = {
+        CharField: {'widget': TextInput(attrs={'size': 80})},
+        TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 80})},
+        MartorField: {'widget': AdminMartorWidget},
+    }
 
 
 @admin.register(models.ActivityType)
@@ -80,9 +79,6 @@ class BookAdmin(MixinAdmin):
 class CatalogAdmin(ImageTagField, MixinAdmin):
     list_display = ('id', 'title', 'image_tag')
     search_fields = ('title', )
-    formfield_overrides = {
-        MartorField: {'widget': AdminMartorWidget},
-    }
 
 
 @admin.register(models.City)
@@ -105,8 +101,11 @@ class DiaryAdmin(ImageTagField, MixinAdmin):
 class EventAdmin(MixinAdmin):
     list_display = ('id', 'title', 'get_start_at',
                     'get_end_at', 'city', 'taken_seats', 'seats')
-    list_filter = ('city', 'tags')
+    list_filter = ('city', 'tags', 'canceled')
     search_fields = ('title', 'contact', 'address', 'description')
+    formfield_overrides = {
+        PhoneNumberField: {'widget': PhoneNumberInternationalFallbackWidget},
+    }
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -119,10 +118,6 @@ class EventAdmin(MixinAdmin):
         if (db_field.name == 'city'
                 and not user.has_perm('api.events_in_all_cities')):
             kwargs['queryset'] = models.City.objects.filter(region=user.region)
-        if db_field.name == 'tags':
-            kwargs['queryset'] = models.Tag.objects.filter(
-                category=self.model._meta.verbose_name_plural
-            )
         return super(
             EventAdmin,
             self
@@ -148,12 +143,19 @@ class EventAdmin(MixinAdmin):
         return obj.end_at.strftime('%Y-%m-%d %H:%M')
 
 
+class HistoryImageInline(admin.TabularInline):
+    model = models.HistoryImage
+    min_num = 4
+    extra = 0
+
+
 @admin.register(models.History)
 class HistoryAdmin(ImageTagField, MixinAdmin):
     list_display = ('id', 'title', 'mentor', 'child',
                     'output_to_main', 'image_tag')
     search_fields = ('title', 'description')
     list_filter = ('output_to_main', )
+    inlines = [HistoryImageInline]
 
 
 @admin.register(models.Movie)

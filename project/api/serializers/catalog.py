@@ -1,21 +1,12 @@
-from django.urls import reverse
 from rest_framework import serializers
 
 from ..models import Catalog
 
 
 class CatalogNextSerializer(serializers.ModelSerializer):
-    url = serializers.SerializerMethodField()
-
     class Meta:
         model = Catalog
-        exclude = ['description', 'image', 'image_url', 'body']
-
-    def get_url(self, obj):
-        return reverse(
-            f'api:v1:{obj.__class__.__name__.lower()}-detail',
-            kwargs={'pk': obj.id}
-        )
+        fields = ['id', 'title']
 
 
 class CatalogSerializer(serializers.ModelSerializer):

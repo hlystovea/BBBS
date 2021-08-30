@@ -1,3 +1,4 @@
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, validators
 
@@ -38,6 +39,24 @@ class ParticipantWriteSerializer(serializers.ModelSerializer):
                 message=_('Вы уже зарегестрированы на это событие')
             )
         ]
+
+    def validate_event(self, event):
+        if event.canceled:
+            raise serializers.ValidationError(
+                _('Событие отменено, запись невозможна'),
+                code='invalid',
+            )
+        if event.end_at <= now():
+            raise serializers.ValidationError(
+                _('Событие уже закончилось'),
+                code='invalid',
+            )
+        if event.participants.count() >= event.seats:
+            raise serializers.ValidationError(
+                _('Все места уже заняты'),
+                code='invalid',
+            )
+        return event
 
 
 class ParticipantReadSerializer(serializers.ModelSerializer):

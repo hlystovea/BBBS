@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     'drf_yasg',
     'api',
     'account',
+    'common',
     'admin_honeypot',
     'martor',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -116,6 +118,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
+
+PHONENUMBER_DEFAULT_REGION = 'RU'
 
 LANGUAGE_CODE = ENV.get('LANGUAGE_CODE', default='ru-Ru')
 
@@ -220,8 +224,6 @@ MARTOR_ENABLE_CONFIGS = {
 }
 
 MARTOR_TOOLBAR_BUTTONS = [
-    'bold', 'italic', 'horizontal', 'heading', 'pre-code',
-    'blockquote', 'unordered-list', 'ordered-list',
-    'link', 'image-link', 'emoji',
-    'direct-mention', 'toggle-maximize', 'help'
+    'bold', 'italic', 'horizontal', 'heading', 'blockquote',
+    'unordered-list', 'link', 'emoji', 'toggle-maximize', 'help',
 ]
