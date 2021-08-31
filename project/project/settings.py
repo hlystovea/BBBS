@@ -227,3 +227,12 @@ MARTOR_TOOLBAR_BUTTONS = [
     'bold', 'italic', 'horizontal', 'heading', 'blockquote',
     'unordered-list', 'link', 'emoji', 'toggle-maximize', 'help',
 ]
+
+# 31.08.2021 Для тестирования автоматической отправки писем с логин/пароль после создания пользователя
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = environ.get('TEST_EMAIL_HOST')
+EMAIL_HOST_USER = environ.get('TEST_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = environ.get('TEST_EMAIL_HOST_PASSWORD')
+EMAIL_PORT = int(environ.get('TEST_EMAIL_PORT', default=465))
+EMAIL_USE_SSL = int(environ.get('TEST_EMAIL_USE_SSL', default=1))
