@@ -43,7 +43,6 @@ martor = "*"
 django-phonenumber-field = {extras = ["phonenumberslite"], version = "*"}
 babel = "*"
 psycopg2-binary = "*"
-psycopg2 = "*"
 
 [dev-packages]
 pytest = "*"
