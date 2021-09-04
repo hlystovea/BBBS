@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from .forms import CustomUserCreationForm, CustomAdminPasswordChangeForm
+from .forms import CustomAdminPasswordChangeForm, CustomUserCreationForm
 
 User = get_user_model()
 

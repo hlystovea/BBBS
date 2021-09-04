@@ -5,7 +5,7 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
 
-from ..models import Article, Event, Place, Book, Movie, Video, Right, Question
+from ..models import Article, Book, Event, Movie, Place, Question, Right, Video
 from ..serializers import SearchResultSerializer
 
 SELECT_VALUE = '\'{model._meta.verbose_name_plural}\''
@@ -43,7 +43,7 @@ class SearchView(GenericViewSet, ListModelMixin):
     def get_queryset(self):
         user = self.request.user
         city_filter = {'city': user.city} if user.is_authenticated else {}
-        SEARCH_QUERYSETS = [
+        SEARCH_QUERYSETS = [ # noqa N806
             Article.objects.all(),
             Event.objects.filter(**city_filter, end_at__gt=now()),
             Place.objects.filter(moderation_flag=True, **city_filter),

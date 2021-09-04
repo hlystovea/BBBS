@@ -190,7 +190,7 @@ MAX_IMAGE_UPLOAD_SIZE = MAX_IMAGE_UPLOAD_SIZE_MB * 1024 * 1024
 IMAGE_EXTENSIONS = ('jpg', 'jpeg', 'gif', 'png', 'bmp')
 
 IMAGE_FIELD_HELP_TEXT = _(
-    f'Поддерживаемые форматы {", ".join(IMAGE_EXTENSIONS)}. Размер до {MAX_IMAGE_UPLOAD_SIZE_MB} Мб.' # noqa(501)
+    f'Поддерживаемые форматы {", ".join(IMAGE_EXTENSIONS)}. Размер до {MAX_IMAGE_UPLOAD_SIZE_MB} Мб.' # noqa E501
 )
 
 
@@ -246,3 +246,5 @@ USER_CREATION_MESSAGE = ENV.get('USER_CREATION_MESSAGE', _('Используйт
 
 USER_PASSWORD_CHANGE_SUBJECT = ENV.get('USER_PASSWORD_CHANGE_SUBJECT', _('Изменение пароля для сайта BBBS'))
 USER_PASSWORD_CHANGE_MESSAGE = ENV.get('USER_PASSWORD_CHANGE_MESSAGE', _('Ваш пароль для BBBS был изменён. Используйте новый пароль %s для входа на сайт'))
+
+SEND_DIARY_TO_CURATOR_SUBJECT = ENV.get('SEND_DIARY_TO_CURATOR_SUBJECT', _('%s: запись в дневнике от %s'))

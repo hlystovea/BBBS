@@ -71,7 +71,7 @@ class BookAdmin(MixinAdmin):
             color = obj.type.color
         except AttributeError:
             color = None
-        return color
+        return color # noqa R504
     get_color.admin_order_field = 'color'
 
 
