@@ -9,7 +9,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from ..validators import (event_canceled_validator, # noqa I001
                           event_lifetime_validator, free_seats_validator) # noqa I001
-
+# noqa I005
 User = get_user_model()
 
 
