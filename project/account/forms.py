@@ -35,7 +35,8 @@ class CustomAdminPasswordChangeForm(AdminPasswordChangeForm):
         """Save the new password and send mail to user with the new password"""
         password = self.cleaned_data['password1']
         self.user.set_password(password)
-        self.email_user(
+        User.email_user(
+            self.user,
             subject=settings.USER_PASSWORD_CHANGE_SUBJECT,
             message=settings.USER_PASSWORD_CHANGE_MESSAGE % password,
             fail_silently=True
