@@ -12,7 +12,7 @@ from .event import (
     ParticipantReadSerializer,
     ParticipantWriteSerializer,
 )
-from .history import HistorySerializer
+from .history import HistoryListSerializer, HistorySerializer
 from .movie import MovieSerializer
 from .place import PlaceListSerializer, PlaceSerializer
 from .profile import EmailSerializer, ProfileSerializer
@@ -36,6 +36,7 @@ __all__ = [
     'DateEventSerializer',
     'ParticipantWriteSerializer',
     'ParticipantReadSerializer',
+    'HistoryListSerializer',
     'HistorySerializer',
     'PlaceListSerializer',
     'PlaceSerializer',

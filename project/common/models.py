@@ -23,4 +23,8 @@ class Image(models.Model):
         verbose_name_plural = _('Изображения')
 
     def __str__(self):
-        return f'{self.image_caption} ({self.image.width}x{self.image.height})'
+        try:
+            return (f'{self.image_caption[:15]}.. '
+                    f'({self.image.width}x{self.image.height})')
+        except FileNotFoundError:
+            return f'{self.image_caption} (файл не найден)'
