@@ -228,11 +228,21 @@ MARTOR_TOOLBAR_BUTTONS = [
     'unordered-list', 'link', 'emoji', 'toggle-maximize', 'help',
 ]
 
-# 31.08.2021 Для тестирования автоматической отправки писем с логин/пароль после создания пользователя
+# Mail
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = environ.get('TEST_EMAIL_HOST')
-EMAIL_HOST_USER = environ.get('TEST_EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = environ.get('TEST_EMAIL_HOST_PASSWORD')
-EMAIL_PORT = int(environ.get('TEST_EMAIL_PORT', default=465))
-EMAIL_USE_SSL = int(environ.get('TEST_EMAIL_USE_SSL', default=1))
+EMAIL_HOST = ENV.get('EMAIL_HOST')
+EMAIL_HOST_USER = ENV.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = ENV.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = int(ENV.get('EMAIL_PORT', default=587))
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+USER_CREATION_SUBJECT = ENV.get('USER_CREATION_SUBJECT', _('Регистрация на сайте BBBS'))
+USER_CREATION_MESSAGE = ENV.get('USER_CREATION_MESSAGE', _('Используйте логин %s и пароль %s для входа на сайт'))
+
+USER_PASSWORD_CHANGE_SUBJECT = ENV.get('USER_PASSWORD_CHANGE_SUBJECT', _('Изменение пароля для сайта BBBS'))
+USER_PASSWORD_CHANGE_MESSAGE = ENV.get('USER_PASSWORD_CHANGE_MESSAGE', _('Ваш пароль для BBBS был изменён. Используйте новый пароль %s для входа на сайт'))

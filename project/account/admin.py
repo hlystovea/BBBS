@@ -12,8 +12,8 @@ User = get_user_model()
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    add_form = CustomUserCreationForm  # to send mails
-    change_password_form = CustomAdminPasswordChangeForm  # to send mails
+    add_form = CustomUserCreationForm
+    change_password_form = CustomAdminPasswordChangeForm
     empty_value_display = _('-пусто-')
     list_display = ('id', 'username', 'email', 'first_name', 'last_name',
                     'city', 'region', 'is_staff', 'is_mentor', 'get_curator')

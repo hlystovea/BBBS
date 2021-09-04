@@ -8,7 +8,7 @@ User = get_user_model()
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = EmailField(required=True)  # TODO blank=False в модели CustomUser
+    email = EmailField(required=True)
 
     def save(self, commit=True):
         """Save the new user and send mail to user with login and password"""
@@ -18,11 +18,11 @@ class CustomUserCreationForm(UserCreationForm):
         login = self.cleaned_data['username']
         user.set_password(password)
         send_mail(
-            subject='Логин для BBBS',
-            message=(f'Используйте этот логин {login} и '
-                     'пароль {password} для входа на сайт'),
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[email]
+            subject=settings.USER_CREATION_SUBJECT,
+            message=settings.USER_CREATION_MESSAGE % (login, password),
+            from_email=None,
+            recipient_list=[email],
+            fail_silently=True
         )
         if commit:
             user.save()
@@ -35,12 +35,10 @@ class CustomAdminPasswordChangeForm(AdminPasswordChangeForm):
         """Save the new password and send mail to user with the new password"""
         password = self.cleaned_data['password1']
         self.user.set_password(password)
-        send_mail(
-            subject='Изменение пароля для BBBS',
-            message=('Ваш пароль для BBBS был изменён. Используйте новый '
-                     f'пароль {password} для входа на сайт'),
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.user.email]
+        self.email_user(
+            subject=settings.USER_PASSWORD_CHANGE_SUBJECT,
+            message=settings.USER_PASSWORD_CHANGE_MESSAGE % password,
+            fail_silently=True
         )
         if commit:
             self.user.save()
