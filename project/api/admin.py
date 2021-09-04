@@ -236,8 +236,8 @@ class RegionAdmin(MixinAdmin):
 
 @admin.register(models.Tag)
 class TagAdmin(MixinAdmin):
-    list_display = ('id', 'name', 'category', 'slug')
-    list_editable = ('category', )
+    list_display = ('id', 'name', 'category', 'slug', 'order')
+    list_editable = ('category', 'order')
     search_fields = ('name', 'category', 'slug')
     list_filter = ('category', )
     prepopulated_fields = {'slug': ('name',)}
