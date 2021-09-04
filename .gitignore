@@ -136,4 +136,6 @@ dmypy.json
 
 # develop directories
 media/
+sent_emails/
 =======
+
