@@ -1,6 +1,6 @@
-import requests
 from typing import List
 
+import requests
 from django.conf import settings
 
 

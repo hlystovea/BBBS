@@ -1,8 +1,8 @@
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AdminPasswordChangeForm, UserCreationForm
 from django.core.mail import send_mail
 from django.forms import EmailField
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AdminPasswordChangeForm
-from django.conf import settings
 
 User = get_user_model()
 

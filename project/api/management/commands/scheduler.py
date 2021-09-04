@@ -1,5 +1,7 @@
 from datetime import timedelta
 
+from api.models import Event
+from api.utils.email import send_email
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from django.conf import settings
@@ -7,9 +9,6 @@ from django.contrib.auth import get_user_model
 from django.core.management import BaseCommand
 from django.utils.timezone import now
 from django_apscheduler.jobstores import DjangoJobStore
-
-from api.models import Event
-from api.utils.email import send_email
 
 User = get_user_model()
 

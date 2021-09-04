@@ -1,11 +1,11 @@
 from .models import Article, Movie, Question
 
 
-class BBBSGeneralException(Exception):
+class ErrorGeneralException(Exception):
     pass
 
 
-class InvalidCountException(BBBSGeneralException):
+class ErrorInvalidCountException(ErrorGeneralException):
     def __init__(self, model):
         self.model = model
         if model == Movie:

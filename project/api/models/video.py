@@ -18,8 +18,7 @@ def get_image_url_from_link(video_url: str) -> str:
         parsed_url = urllib.parse.urlparse(desired_url)
         parameters = urllib.parse.parse_qs(parsed_url.query)
         video_id = parameters['v'][0]
-        video_thumbnail_url = f'https://img.youtube.com/vi/{video_id}/0.jpg'
-        return video_thumbnail_url
+        return f'https://img.youtube.com/vi/{video_id}/0.jpg'
     except requests.exceptions.ConnectionError:
         raise ConnectionError
 

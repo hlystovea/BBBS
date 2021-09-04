@@ -1,7 +1,6 @@
-from requests.exceptions import RequestException
-
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from requests.exceptions import RequestException
 from rest_framework import status, views
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -52,3 +51,4 @@ class SendPassView(views.APIView):
                 )
             }
             return Response(message, status=status.HTTP_200_OK)
+        return
