@@ -51,3 +51,4 @@ class SendPassView(views.APIView):
                 )
             }
             return Response(message, status=status.HTTP_200_OK)
+        return
