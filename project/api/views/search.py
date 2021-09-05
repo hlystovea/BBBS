@@ -16,7 +16,7 @@ REVERSE_VIEWNAME_TEMPLATE = '%s{model}-list' % NAMESPACE
 def get_path(model):
     return reverse(
         REVERSE_VIEWNAME_TEMPLATE.format(model=model.__name__.lower())
-    )
+    ).replace('/api/v1/', '')
 
 
 def build_select_dict(model):
