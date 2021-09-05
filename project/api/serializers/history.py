@@ -13,10 +13,11 @@ class HistoryImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'image', 'image_caption']
         model = HistoryImage
 
+
 class HistoryNextSerializer(serializers.ModelSerializer):
     class Meta:
         model = History
-        fields= ['id', 'title']
+        fields = ['id', 'title']
 
 
 class HistorySerializer(serializers.ModelSerializer):
@@ -42,4 +43,4 @@ class HistoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = History
-        fields= ['id', 'pair']
+        fields = ['id', 'pair']
