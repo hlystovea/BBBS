@@ -71,7 +71,7 @@ class BookAdmin(MixinAdmin):
             color = obj.type.color
         except AttributeError:
             color = None
-        return color
+        return color # noqa R504
     get_color.admin_order_field = 'color'
 
 
@@ -236,8 +236,8 @@ class RegionAdmin(MixinAdmin):
 
 @admin.register(models.Tag)
 class TagAdmin(MixinAdmin):
-    list_display = ('id', 'name', 'category', 'slug')
-    list_editable = ('category', )
+    list_display = ('id', 'name', 'category', 'slug', 'order')
+    list_editable = ('category', 'order')
     search_fields = ('name', 'category', 'slug')
     list_filter = ('category', )
     prepopulated_fields = {'slug': ('name',)}

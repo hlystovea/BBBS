@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import QuerySet
 
-from ..exceptions import InvalidCountException
+from ..exceptions import BBBSInvalidCountError
 
 
 class Castraitor:
@@ -13,7 +13,7 @@ class Castraitor:
 
     def check_n(self):
         if self.n <= 0:
-            raise InvalidCountException(self.model)
+            raise BBBSInvalidCountError(self.model)
         return self.n
 
     def get_n_records(self) -> QuerySet:

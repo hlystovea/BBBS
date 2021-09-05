@@ -1,6 +1,7 @@
-from requests.exceptions import RequestException
-
+from django.conf import settings
+from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
+from requests.exceptions import RequestException
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -10,7 +11,6 @@ from rest_framework.response import Response
 from ..models import Diary
 from ..permissions import IsOwner
 from ..serializers import DiarySerializer, EmailSerializer
-from ..utils.email import send_email
 
 
 class DiaryViewSet(viewsets.ModelViewSet):
@@ -19,7 +19,7 @@ class DiaryViewSet(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
 
     def get_queryset(self):
-        return Diary.objects.filter(mentor=self.request.user)
+        return Diary.objects.filter(mentor=self.request.user).order_by('-date')
 
     def perform_create(self, serializer):
         serializer.save(mentor=self.request.user)
@@ -32,11 +32,16 @@ class DiaryViewSet(viewsets.ModelViewSet):
             email = mentor.curator.email
             serializer = EmailSerializer(data={'email': email})
             if serializer.is_valid(raise_exception=True):
-                subject = f'{mentor.first_name} {mentor.last_name[:1]}.: \
-                            запись в дневнике от {diary.date.isoformat()}'
-                text = diary.description
                 try:
-                    send_email(email, subject, text)
+                    send_mail(
+                        subject=settings.SEND_DIARY_TO_CURATOR_SUBJECT % (
+                            mentor,
+                            diary.date.isoformat()
+                        ),
+                        message=diary.description,
+                        from_email=None,
+                        recipient_list=[email],
+                    )
                 except RequestException:
                     message = {
                         'diary': _('Проблемы с отправкой, попробуйте позднее.')

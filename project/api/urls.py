@@ -3,7 +3,6 @@ from rest_framework.routers import DefaultRouter
 
 from . import views
 
-
 v1_router = DefaultRouter()
 
 v1_router.register(r'articles', views.ArticleViewSet, basename='article')

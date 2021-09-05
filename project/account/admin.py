@@ -5,11 +5,15 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from .forms import CustomAdminPasswordChangeForm, CustomUserCreationForm
+
 User = get_user_model()
 
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    change_password_form = CustomAdminPasswordChangeForm
     empty_value_display = _('-пусто-')
     list_display = ('id', 'username', 'email', 'first_name', 'last_name',
                     'city', 'region', 'is_staff', 'is_mentor', 'get_curator')
@@ -18,6 +22,22 @@ class CustomUserAdmin(UserAdmin):
                    'is_staff', 'is_active', 'is_superuser')
     autocomplete_fields = ('city', 'region', 'curator')
     readonly_fields = ('date_joined', 'last_login')
+
+    add_fieldsets = (
+        (_('Логин/пароль'), {
+            'fields': ('username', 'password1', 'password2')
+        }),
+        (_('Персональная информация'), {
+            'fields': (('first_name', 'last_name'), 'email',
+                       ('city', 'region'), 'is_mentor', 'curator')
+        }),
+        (_('Права доступа'), {
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups'),
+        }),
+        (_('Даты последнего входа/регистрации'), {
+            'fields': ('last_login', 'date_joined')
+        }),
+    )
 
     fieldsets = (
         (_('Логин/пароль'), {

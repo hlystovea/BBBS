@@ -23,10 +23,17 @@ class Tag(models.Model):
         verbose_name=_('Слаг (Ссылка)'),
         unique=True,
     )
+    order = models.PositiveSmallIntegerField(
+        verbose_name=_('Порядок вывода'),
+        default=0,
+        help_text=_(
+            'Теги с меньшим значением выводятся первыми.'
+        ),
+    )
 
     class Meta:
         app_label = 'api'
-        ordering = ('category', 'name')
+        ordering = ('category', 'order')
         verbose_name = _('Тег')
         verbose_name_plural = _('Теги')
 

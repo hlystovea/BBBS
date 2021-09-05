@@ -9,7 +9,6 @@ from . import TagMixin
 
 
 class VideoView(ReadOnlyModelViewSet, TagMixin):
-    queryset = Video.objects.all()
     serializer_class = VideoSerializer
     permission_classes = [AllowAny]
     pagination_class = LimitOffsetPagination

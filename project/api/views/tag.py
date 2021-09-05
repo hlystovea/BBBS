@@ -6,7 +6,7 @@ from ..serializers import TagSerializer
 
 
 class TagViewSet(ReadOnlyModelViewSet):
-    queryset = Tag.objects.all()
+    queryset = Tag.objects.order_by('order')
     serializer_class = TagSerializer
     permission_classes = [AllowAny]
     pagination_class = None

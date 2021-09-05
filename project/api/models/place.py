@@ -21,18 +21,16 @@ class Place(models.Model, ImageFromUrlMixin):
         upload_to='places/',
         blank=True,
         null=True,
-        help_text=_(
-            f'Поддерживаемые форматы {", ".join(settings.IMAGE_EXTENSIONS)}. \
-             Размер до 10М.'
-        ),
+        help_text=settings.IMAGE_FIELD_HELP_TEXT,
         validators=[file_size_validator, image_extension_validator],
     )
     image_url = models.URLField(
         verbose_name=_('Ссылка на изображение'),
         blank=True,
         null=True,
-        help_text=_('Альтернативный способ загрузки изображения. \
-                     Приоритет у файла.'),
+        help_text=_(
+            'Альтернативный способ загрузки изображения. Приоритет у файла.'
+        ),
     )
     link = models.URLField(
         verbose_name=_('Сайт'),

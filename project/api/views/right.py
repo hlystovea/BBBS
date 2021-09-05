@@ -8,7 +8,7 @@ from . import TagMixin
 
 
 class RightViewSet(ReadOnlyModelViewSet, TagMixin):
-    queryset = Right.objects.all()
+    queryset = Right.objects.order_by('-id')
     permission_classes = [AllowAny]
     pagination_class = LimitOffsetPagination
 

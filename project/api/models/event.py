@@ -7,9 +7,9 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
-from ..validators import (event_lifetime_validator,
-                          free_seats_validator, event_canceled_validator)
-
+from ..validators import (event_canceled_validator, # noqa I001
+                          event_lifetime_validator, free_seats_validator) # noqa I001
+# noqa I005
 User = get_user_model()
 
 

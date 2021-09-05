@@ -26,9 +26,14 @@ def get_event(request):
     if not user.is_authenticated:
         return None
     booked = Event.objects.filter(pk=OuterRef('pk'), participants=user)
-    events = Event.objects.filter(end_at__gt=now(), city=user.city) \
-                  .annotate(booked=Exists(booked)) \
-                  .annotate(remain_seats=F('seats') - Count('participants'))
+    events = Event.objects.filter(
+        end_at__gt=now(),
+        city=user.city,
+    ).annotate(
+        booked=Exists(booked)
+    ).annotate(
+        remain_seats=F('seats') - Count('participants')
+    )
     return events.order_by('start_at').first()
 
 

@@ -190,7 +190,7 @@ MAX_IMAGE_UPLOAD_SIZE = MAX_IMAGE_UPLOAD_SIZE_MB * 1024 * 1024
 IMAGE_EXTENSIONS = ('jpg', 'jpeg', 'gif', 'png', 'bmp')
 
 IMAGE_FIELD_HELP_TEXT = _(
-    f'Поддерживаемые форматы {", ".join(IMAGE_EXTENSIONS)}. Размер до {MAX_IMAGE_UPLOAD_SIZE_MB} Мб.' # noqa(501)
+    f'Поддерживаемые форматы {", ".join(IMAGE_EXTENSIONS)}. Размер до {MAX_IMAGE_UPLOAD_SIZE_MB} Мб.' # noqa E501
 )
 
 
@@ -227,3 +227,24 @@ MARTOR_TOOLBAR_BUTTONS = [
     'bold', 'italic', 'horizontal', 'heading', 'blockquote',
     'unordered-list', 'link', 'emoji', 'toggle-maximize', 'help',
 ]
+
+# Mail
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = ENV.get('EMAIL_HOST')
+EMAIL_HOST_USER = ENV.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = ENV.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = int(ENV.get('EMAIL_PORT', default=587))
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+USER_CREATION_SUBJECT = ENV.get('USER_CREATION_SUBJECT', _('Регистрация на сайте BBBS'))
+USER_CREATION_MESSAGE = ENV.get('USER_CREATION_MESSAGE', _('Используйте логин %s и пароль %s для входа на сайт'))
+
+USER_PASSWORD_CHANGE_SUBJECT = ENV.get('USER_PASSWORD_CHANGE_SUBJECT', _('Изменение пароля для сайта BBBS'))
+USER_PASSWORD_CHANGE_MESSAGE = ENV.get('USER_PASSWORD_CHANGE_MESSAGE', _('Ваш пароль для BBBS был изменён. Используйте новый пароль %s для входа на сайт'))
+
+SEND_DIARY_TO_CURATOR_SUBJECT = ENV.get('SEND_DIARY_TO_CURATOR_SUBJECT', _('%s: запись в дневнике от %s'))

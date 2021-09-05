@@ -8,7 +8,7 @@ from . import TagMixin
 
 
 class MovieView(ReadOnlyModelViewSet, TagMixin):
-    queryset = Movie.objects.all()
+    queryset = Movie.objects.order_by('-id')
     serializer_class = MovieSerializer
     permission_classes = [AllowAny]
     pagination_class = LimitOffsetPagination
