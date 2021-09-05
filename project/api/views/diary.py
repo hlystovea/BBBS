@@ -19,7 +19,7 @@ class DiaryViewSet(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
 
     def get_queryset(self):
-        return Diary.objects.filter(mentor=self.request.user)
+        return Diary.objects.filter(mentor=self.request.user).order_by('-date')
 
     def perform_create(self, serializer):
         serializer.save(mentor=self.request.user)

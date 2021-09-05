@@ -19,4 +19,4 @@ class HistoryViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         pair = Concat(F('mentor__first_name'), Value(' и '), F('child'))
-        return History.objects.annotate(pair=pair)
+        return History.objects.annotate(pair=pair).order_by('-id')
