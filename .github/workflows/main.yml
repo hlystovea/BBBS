@@ -92,6 +92,9 @@ jobs:
             echo MAIL_API=${{ secrets.MAIL_API }} >> .env
             echo MAIL_API_KEY=${{ secrets.MAIL_API_KEY }} >> .env
             echo FROM_MAIL=${{ secrets.FROM_MAIL }} >> .env
+            echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env
+            echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .env
+            echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env
             sudo docker-compose up -d
 
   send_message:
