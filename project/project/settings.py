@@ -15,6 +15,8 @@ SECRET_KEY = ENV['SECRET_KEY']
 
 DEBUG = int(ENV.get('DJANGO_DEVELOPMENT', False))
 
+ADMINS = [('Евгений', 'hlystovea@gmail.com'), ]
+
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*', 'web:8000']
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -41,6 +43,11 @@ INSTALLED_APPS = [
     'admin_honeypot',
     'martor',
     'phonenumber_field',
+    "django_cron",
+]
+
+CRON_CLASSES = [
+    'api.cron.EventCanceled',
 ]
 
 MIDDLEWARE = [
@@ -230,6 +237,7 @@ MARTOR_TOOLBAR_BUTTONS = [
 
 # Mail
 
+EMAIL_SUBJECT_PREFIX = 'BBBS: '
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = ENV.get('EMAIL_HOST')
 EMAIL_HOST_USER = ENV.get('EMAIL_HOST_USER')
