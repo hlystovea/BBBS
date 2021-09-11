@@ -1,5 +1,4 @@
 from django.contrib.postgres.search import TrigramSimilarity
-from django.urls import reverse
 from django.utils.timezone import now
 from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import AllowAny
@@ -13,16 +12,15 @@ NAMESPACE = 'api:v1:'
 REVERSE_VIEWNAME_TEMPLATE = '%s{model}-list' % NAMESPACE
 
 
-def get_path(model):
-    return reverse(
-        REVERSE_VIEWNAME_TEMPLATE.format(model=model.__name__.lower())
-    ).replace('/api/v1/', '')
+def get_path(model, plural=False):
+    return model.__name__.lower() + 's' * plural
 
 
 def build_select_dict(model):
     return {
         'model_name': SELECT_VALUE.format(model=model),
-        'url': f'\'{get_path(model)}\' || id'
+        'page': f'\'{get_path(model)}\'',
+        'path': f'\'{get_path(model, True)}/\' || id',
     }
 
 
@@ -33,7 +31,7 @@ def build_queryset(queryset, search_text):
         rank__gt=0.071428575
     ).extra(
         select=build_select_dict(queryset.model)
-    ).values('title', 'model_name', 'rank', 'url')
+    ).values('title', 'model_name', 'rank', 'page', 'path')
 
 
 class SearchView(GenericViewSet, ListModelMixin):
