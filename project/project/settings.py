@@ -15,7 +15,7 @@ SECRET_KEY = ENV['SECRET_KEY']
 
 DEBUG = int(ENV.get('DJANGO_DEVELOPMENT', False))
 
-ADMINS = [('Евгений', 'hlystovea@gmail.com'), ]
+ADMINS = [('BBBS_team', ENV.get('EMAIL_HOST_USER')), ]
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*', 'web:8000']
 
