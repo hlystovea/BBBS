@@ -64,7 +64,7 @@ class CustomUser(AbstractUser):
             if self.city is None:
                 errors['city'] = ValidationError(
                     _('У наставника должен быть город'))
-        if self.curator is not None:
+        if self.curator and not self.is_mentor:
             errors['curator'] = ValidationError(
                 _('Куратор может быть только у наставника'))
         if errors:
