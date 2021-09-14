@@ -1,6 +1,6 @@
 import time
 
-from django.core.mail import send_mail, mail_admins
+from django.core.mail import mail_admins, send_mail
 from django.utils.timezone import now
 from django_cron import CronJobBase, Schedule
 
