@@ -5,4 +5,4 @@ class SearchResultSerializer(serializers.Serializer):
     title = serializers.CharField()
     model_name = serializers.CharField()
     page = serializers.CharField()
-    path = serializers.CharField()
+    id = serializers.CharField()
