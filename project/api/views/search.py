@@ -7,20 +7,26 @@ from rest_framework.viewsets import GenericViewSet
 from ..models import Article, Book, Event, Movie, Place, Question, Right, Video
 from ..serializers import SearchResultSerializer
 
-SELECT_VALUE = '\'{model._meta.verbose_name_plural}\''
-NAMESPACE = 'api:v1:'
-REVERSE_VIEWNAME_TEMPLATE = '%s{model}-list' % NAMESPACE
+MODEL_URL_MAP = {
+    Article: 'articles',
+    Book: 'books',
+    Event: 'afisha',
+    Movie: 'movies',
+    Place: 'places',
+    Question: 'questions',
+    Right: 'rights',
+    Video: 'video',
+}
 
 
-def get_path(model, plural=False):
-    return model.__name__.lower() + 's' * plural
+def get_path(model):
+    return MODEL_URL_MAP.get(model)
 
 
 def build_select_dict(model):
     return {
-        'model_name': SELECT_VALUE.format(model=model),
+        'model_name': f'\'{model._meta.verbose_name_plural}\'',
         'page': f'\'{get_path(model)}\'',
-        'path': f'\'{get_path(model, True)}/\' || id',
     }
 
 
@@ -31,7 +37,7 @@ def build_queryset(queryset, search_text):
         rank__gt=0.071428575
     ).extra(
         select=build_select_dict(queryset.model)
-    ).values('title', 'model_name', 'rank', 'page', 'path')
+    ).values('title', 'model_name', 'rank', 'page', 'id')
 
 
 class SearchView(GenericViewSet, ListModelMixin):
