@@ -8,14 +8,14 @@ from ..models import Article, Book, Event, Movie, Place, Question, Right, Video
 from ..serializers import SearchResultSerializer
 
 MODEL_URL_MAP = {
-    Article: '/articles',
-    Book: '/books',
-    Event: '/afisha',
-    Movie: '/movies',
-    Place: '/places',
-    Question: '/questions',
-    Right: '/rights',
-    Video: '/video',
+    Article: 'articles',
+    Book: 'books',
+    Event: 'afisha',
+    Movie: 'movies',
+    Place: 'places',
+    Question: 'questions',
+    Right: 'rights',
+    Video: 'video',
 }
 
 
