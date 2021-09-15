@@ -7,10 +7,6 @@ from rest_framework.viewsets import GenericViewSet
 from ..models import Article, Book, Event, Movie, Place, Question, Right, Video
 from ..serializers import SearchResultSerializer
 
-SELECT_VALUE = '\'{model._meta.verbose_name_plural}\''
-NAMESPACE = 'api:v1:'
-REVERSE_VIEWNAME_TEMPLATE = '%s{model}-list' % NAMESPACE
-
 MODEL_URL_MAP = {
     Article: '/articles',
     Book: '/books',
@@ -29,7 +25,7 @@ def get_path(model):
 
 def build_select_dict(model):
     return {
-        'model_name': SELECT_VALUE.format(model=model),
+        'model_name': f'\'{model._meta.verbose_name_plural}\'',
         'page': f'\'{get_path(model)}\'',
     }
 
