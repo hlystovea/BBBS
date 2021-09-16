@@ -19,14 +19,10 @@ MODEL_URL_MAP = {
 }
 
 
-def get_path(model):
-    return MODEL_URL_MAP.get(model)
-
-
 def build_select_dict(model):
     return {
         'model_name': f'\'{model._meta.verbose_name_plural}\'',
-        'page': f'\'{get_path(model)}\'',
+        'page': f'\'{MODEL_URL_MAP.get(model)}\'',
     }
 
 
@@ -49,7 +45,11 @@ class SearchView(GenericViewSet, ListModelMixin):
         city_filter = {'city': user.city} if user.is_authenticated else {}
         SEARCH_QUERYSETS = [ # noqa N806
             Article.objects.all(),
-            Event.objects.filter(**city_filter, end_at__gt=now()),
+            Event.objects.filter(
+                **city_filter,
+                end_at__gt=now(),
+                canceled=False
+            ),
             Place.objects.filter(moderation_flag=True, **city_filter),
             Book.objects.all(),
             Movie.objects.all(),
