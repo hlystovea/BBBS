@@ -42,7 +42,12 @@ class SearchView(GenericViewSet, ListModelMixin):
 
     def get_queryset(self):
         user = self.request.user
-        city_filter = {'city': user.city} if user.is_authenticated else {}
+        city_filter = {}
+        resource_filter = {}
+        if user.is_authenticated:
+            city_filter['city'] = user.city
+        else:
+            resource_filter['resource_group'] = False
         SEARCH_QUERYSETS = [ # noqa N806
             Article.objects.all(),
             Event.objects.filter(
@@ -53,7 +58,7 @@ class SearchView(GenericViewSet, ListModelMixin):
             Place.objects.filter(moderation_flag=True, **city_filter),
             Book.objects.all(),
             Movie.objects.all(),
-            Video.objects.all(),
+            Video.objects.filter(**resource_filter),
             Right.objects.all(),
             Question.objects.exclude(answer=None)
         ]
