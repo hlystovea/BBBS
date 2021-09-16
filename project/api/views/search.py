@@ -1,5 +1,4 @@
 from django.contrib.postgres.search import TrigramSimilarity
-from django.urls import reverse
 from django.utils.timezone import now
 from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import AllowAny
@@ -8,21 +7,22 @@ from rest_framework.viewsets import GenericViewSet
 from ..models import Article, Book, Event, Movie, Place, Question, Right, Video
 from ..serializers import SearchResultSerializer
 
-SELECT_VALUE = '\'{model._meta.verbose_name_plural}\''
-NAMESPACE = 'api:v1:'
-REVERSE_VIEWNAME_TEMPLATE = '%s{model}-list' % NAMESPACE
-
-
-def get_path(model):
-    return reverse(
-        REVERSE_VIEWNAME_TEMPLATE.format(model=model.__name__.lower())
-    )
+MODEL_URL_MAP = {
+    Article: 'articles',
+    Book: 'books',
+    Event: 'afisha',
+    Movie: 'movies',
+    Place: 'places',
+    Question: 'questions',
+    Right: 'rights',
+    Video: 'video',
+}
 
 
 def build_select_dict(model):
     return {
-        'model_name': SELECT_VALUE.format(model=model),
-        'url': f'\'{get_path(model)}\' || id'
+        'model_name': f'\'{model._meta.verbose_name_plural}\'',
+        'page': f'\'{MODEL_URL_MAP.get(model)}\'',
     }
 
 
@@ -33,7 +33,7 @@ def build_queryset(queryset, search_text):
         rank__gt=0.071428575
     ).extra(
         select=build_select_dict(queryset.model)
-    ).values('title', 'model_name', 'rank', 'url')
+    ).values('title', 'model_name', 'rank', 'page', 'id')
 
 
 class SearchView(GenericViewSet, ListModelMixin):
@@ -45,7 +45,11 @@ class SearchView(GenericViewSet, ListModelMixin):
         city_filter = {'city': user.city} if user.is_authenticated else {}
         SEARCH_QUERYSETS = [ # noqa N806
             Article.objects.all(),
-            Event.objects.filter(**city_filter, end_at__gt=now()),
+            Event.objects.filter(
+                **city_filter,
+                end_at__gt=now(),
+                canceled=False
+            ),
             Place.objects.filter(moderation_flag=True, **city_filter),
             Book.objects.all(),
             Movie.objects.all(),
