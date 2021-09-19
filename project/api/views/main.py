@@ -40,15 +40,28 @@ def get_event(request):
 def get_place(request):
     user = request.user
     city = request.data.get('city')
-    places = Place.objects.filter(output_to_main=True, moderation_flag=True)
+    places = Place.objects.filter(
+        output_to_main=True,
+        moderation_flag=True
+    ).order_by(
+        '-id'
+    )
     if user.is_authenticated:
         if places.filter(city=user.city).exists():
-            return places.filter(city=user.city).last()
-        return places.last()
+            return places.filter(city=user.city).first()
+        return places.first()
     if city is not None:
         if places.filter(city=city).exists():
-            return places.filter(city=city).last()
-    return places.last()
+            return places.filter(city=city).first()
+    return places.first()
+
+
+def get_video(request):
+    user = request.user
+    video = Video.objects.filter(output_to_main=True).order_by('-id')
+    if user.is_authenticated:
+        return video.first()
+    return video.filter(resource_group=False).first()
 
 
 class MainViewSet(RetrieveAPIView):
@@ -59,8 +72,8 @@ class MainViewSet(RetrieveAPIView):
         instance = MainPage()
         instance.event = get_event(request)
         instance.place = get_place(request)
+        instance.video = get_video(request)
         instance.history = History.objects.filter(output_to_main=True).last()
-        instance.video = Video.objects.filter(output_to_main=True).last()
         instance.articles = Article.objects.filter(
             output_to_main=True
         ).order_by(

@@ -106,7 +106,7 @@ class Place(models.Model, ImageFromUrlMixin):
 
     class Meta:
         app_label = 'api'
-        ordering = ('id',)
+        ordering = ('-id',)
         verbose_name = _('Куда пойти')
         verbose_name_plural = _('Куда пойти')
         permissions = (
