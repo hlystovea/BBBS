@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.timezone import now
 from django_cron import CronJobBase, Schedule
 
-from afisha.models import EventMailing
+from afisha.models import EventMailing  # noqa (I001)
 from .models import Participant
 
 
