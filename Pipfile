@@ -48,8 +48,6 @@ django-cron = "*"
 [dev-packages]
 pytest = "*"
 pytest-django = "*"
-django-extensions = "*"
-Werkzeug = "*"
 
 [requires]
 python_version = "3.9"
