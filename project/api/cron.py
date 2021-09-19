@@ -9,7 +9,7 @@ from django.utils.timezone import now
 from django_cron import CronJobBase, Schedule
 
 from afisha.models import EventMailing
-from api.models import Participant
+from .models import Participant
 
 
 class EventCanceled(CronJobBase):
