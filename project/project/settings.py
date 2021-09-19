@@ -44,11 +44,12 @@ INSTALLED_APPS = [
     'admin_honeypot',
     'martor',
     'phonenumber_field',
-    "django_cron",
+    'django_cron',
 ]
 
 CRON_CLASSES = [
     'api.cron.EventCanceled',
+    'api.cron.EventReminder',
 ]
 
 MIDDLEWARE = [
@@ -249,6 +250,8 @@ EMAIL_USE_SSL = False
 
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+EMAIL_SEND_TIMEOUT = int(ENV.get('EMAIL_SEND_TIMEOUT', 10))
 
 USER_CREATION_SUBJECT = ENV.get('USER_CREATION_SUBJECT', _('Регистрация на сайте BBBS'))
 USER_CREATION_MESSAGE = ENV.get('USER_CREATION_MESSAGE', _('Вас зарегестрировали на сайте BBBS. Используйте логин %s и пароль %s для входа на сайт.'))
