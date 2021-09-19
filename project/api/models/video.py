@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_resized import ResizedImageField
 
 from ..validators import file_size_validator, image_extension_validator
 from .mixins import ImageFromUrlMixin
@@ -32,11 +33,13 @@ class Video(models.Model, ImageFromUrlMixin):
         verbose_name=_('Информация'),
         max_length=512,
     )
-    image = models.ImageField(
+    image = ResizedImageField(
         verbose_name=_('Изображение'),
         upload_to='videos/',
         blank=True,
         null=True,
+        size=[1280, 720],
+        crop=['middle', 'center'],
         help_text=settings.IMAGE_FIELD_HELP_TEXT,
         validators=[file_size_validator, image_extension_validator],
     )

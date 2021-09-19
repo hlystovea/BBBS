@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core import validators
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_resized import ResizedImageField
 
 from ..validators import file_size_validator, image_extension_validator
 from .mixins import ImageFromUrlMixin
@@ -16,11 +17,13 @@ class Place(models.Model, ImageFromUrlMixin):
     description = models.TextField(
         verbose_name=_('Комментарий'),
     )
-    image = models.ImageField(
+    image = ResizedImageField(
         verbose_name=_('Изображение'),
         upload_to='places/',
         blank=True,
         null=True,
+        size=[1280, 720],
+        crop=['middle', 'center'],
         help_text=settings.IMAGE_FIELD_HELP_TEXT,
         validators=[file_size_validator, image_extension_validator],
     )
@@ -106,7 +109,7 @@ class Place(models.Model, ImageFromUrlMixin):
 
     class Meta:
         app_label = 'api'
-        ordering = ('id',)
+        ordering = ('-id',)
         verbose_name = _('Куда пойти')
         verbose_name_plural = _('Куда пойти')
         permissions = (

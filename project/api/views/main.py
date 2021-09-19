@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import Count, Exists, F, OuterRef
 from django.utils.timezone import now
 from rest_framework.generics import RetrieveAPIView
@@ -6,7 +7,6 @@ from rest_framework.response import Response
 
 from ..models import Article, Event, History, Movie, Place, Question, Video
 from ..serializers.main import MainSerializer
-from ..utils.castraitor import Castraitor
 
 
 class MainPage:
@@ -40,33 +40,54 @@ def get_event(request):
 def get_place(request):
     user = request.user
     city = request.data.get('city')
-    places = Place.objects.filter(output_to_main=True, moderation_flag=True)
+    places = Place.objects.filter(
+        output_to_main=True,
+        moderation_flag=True
+    ).order_by(
+        '-id'
+    )
     if user.is_authenticated:
         if places.filter(city=user.city).exists():
-            return places.filter(city=user.city).last()
-        return places.last()
+            return places.filter(city=user.city).first()
+        return places.first()
     if city is not None:
         if places.filter(city=city).exists():
-            return places.filter(city=city).last()
-    return places.last()
+            return places.filter(city=city).first()
+    return places.first()
+
+
+def get_video(request):
+    user = request.user
+    video = Video.objects.filter(output_to_main=True).order_by('-id')
+    if user.is_authenticated:
+        return video.first()
+    return video.filter(resource_group=False).first()
 
 
 class MainViewSet(RetrieveAPIView):
     serializer_class = MainSerializer
     permission_classes = [AllowAny]
 
-    MOVIES_LENGTH = 7
-    QUESTION_LENGTH = 10
-    ARTICLES_LENGTH = 2
-
     def retrieve(self, request, *args, **kwargs):
         instance = MainPage()
         instance.event = get_event(request)
-        instance.history = History.objects.filter(output_to_main=True).last()
         instance.place = get_place(request)
-        instance.articles = Castraitor(Article, self.ARTICLES_LENGTH, '-id').get_n_records()  # noqa E501
-        instance.movies = Castraitor(Movie, self.MOVIES_LENGTH, '-id').get_n_records()  # noqa E501
-        instance.video = Video.objects.filter(output_to_main=True).last()
-        instance.questions = Castraitor(Question, self.QUESTION_LENGTH, '-id').get_n_records()  # noqa E501
+        instance.video = get_video(request)
+        instance.history = History.objects.filter(output_to_main=True).last()
+        instance.articles = Article.objects.filter(
+            output_to_main=True
+        ).order_by(
+            '-id'
+        )[:settings.MAIN_ARTICLES_LENGTH]
+        instance.movies = Movie.objects.filter(
+            output_to_main=True
+        ).order_by(
+            '-id'
+        )[:settings.MAIN_MOVIES_LENGTH]
+        instance.questions = Question.objects.filter(
+            output_to_main=True
+        ).order_by(
+            '-id'
+        )[:settings.MAIN_QUESTION_LENGTH]
         serializer = self.get_serializer(instance)
         return Response(serializer.data)

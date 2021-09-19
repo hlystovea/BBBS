@@ -32,10 +32,6 @@ urlpatterns = [
         views.MainViewSet.as_view(), name='main'
     ),
     path(
-        'v1/profile/send_password/',
-        views.SendPassView.as_view(), name='send_password'
-    ),
-    path(
         'v1/profile/',
         views.ProfileViewSet.as_view(), name='profile'
     ),

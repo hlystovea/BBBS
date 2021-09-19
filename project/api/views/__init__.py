@@ -10,7 +10,7 @@ from .main import MainViewSet
 from .mixins import GetListPostPutMixin, TagMixin
 from .movie import MovieView
 from .place import PlacesViewSet
-from .profile import ProfileViewSet, SendPassView
+from .profile import ProfileViewSet
 from .question import QuestionViewSet
 from .right import RightViewSet
 from .search import SearchView
@@ -29,7 +29,6 @@ __all__ = [
     'HistoryViewSet',
     'PlacesViewSet',
     'ProfileViewSet',
-    'SendPassView',
     'RightViewSet',
     'TagViewSet',
     'BookView',
