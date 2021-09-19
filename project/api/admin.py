@@ -170,7 +170,7 @@ class MovieAdmin(ImageTagField, MixinAdmin):
 class QuestionAdmin(MixinAdmin):
     list_display = ('id', 'get_title', 'get_answer')
     search_fields = ('title', 'answer')
-    list_filter = ('tags', )
+    list_filter = ('tags', 'output_to_main')
 
     @admin.display(description=_('Вопрос'))
     def get_title(self, obj):
