@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_apscheduler',
     'rest_framework',
     'django_filters',
     'corsheaders',
@@ -204,18 +203,6 @@ IMAGE_FIELD_HELP_TEXT = _(
 
 
 ADMIN_HONEYPOT_EMAIL_ADMINS = False
-
-
-# Mail Backend
-
-MAIL_API = ENV.get('MAIL_API')
-MAIL_API_KEY = ENV.get('MAIL_API_KEY')
-FROM_MAIL = ENV.get('FROM_MAIL')
-
-
-# Scheduler
-
-APSCHEDULER_DATETIME_FORMAT = 'd.m.Y H:i:s'
 
 
 # Martor settings
