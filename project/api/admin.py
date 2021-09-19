@@ -136,11 +136,11 @@ class EventAdmin(MixinAdmin):
 
     @admin.display(description=_('Время начала'))
     def get_start_at(self, obj):
-        return obj.start_at.strftime('%Y-%m-%d %H:%M')
+        return obj.start_at.strftime('%d.%m.%Y %H:%M')
 
     @admin.display(description=_('Время окончания'))
     def get_end_at(self, obj):
-        return obj.end_at.strftime('%Y-%m-%d %H:%M')
+        return obj.end_at.strftime('%d.%m.%Y %H:%M')
 
 
 class HistoryImageInline(admin.TabularInline):
