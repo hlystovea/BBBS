@@ -1,15 +1,15 @@
+import time
 from datetime import timedelta
 from smtplib import SMTPException
-import time
 
 from django.conf import settings
 from django.core.mail import send_mail
-from django.utils.timezone import now
 from django.template.loader import render_to_string
+from django.utils.timezone import now
 from django_cron import CronJobBase, Schedule
 
-from api.models import Participant
 from afisha.models import EventMailing
+from api.models import Participant
 
 
 class EventCanceled(CronJobBase):
