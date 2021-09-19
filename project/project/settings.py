@@ -15,7 +15,7 @@ SECRET_KEY = ENV['SECRET_KEY']
 
 DEBUG = int(ENV.get('DJANGO_DEVELOPMENT', False))
 
-ADMINS = [('Евгений', 'hlystovea@gmail.com'), ]
+ADMINS = [('BBBS_team', ENV.get('EMAIL_HOST_USER')), ]
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*', 'web:8000']
 
@@ -32,22 +32,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_apscheduler',
     'rest_framework',
     'django_filters',
     'corsheaders',
     'drf_yasg',
+    'afisha',
     'api',
     'account',
     'common',
     'admin_honeypot',
     'martor',
     'phonenumber_field',
-    "django_cron",
+    'django_cron',
 ]
 
 CRON_CLASSES = [
     'api.cron.EventCanceled',
+    'api.cron.EventReminder',
 ]
 
 MIDDLEWARE = [
@@ -191,7 +192,20 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
 }
 
+
+# Main page
+
+MAIN_ARTICLES_LENGTH = int(ENV.get('MAIN_ARTICLES_LENGTH', 2))
+MAIN_QUESTION_LENGTH = int(ENV.get('MAIN_QUESTION_LENGTH', 10))
+MAIN_MOVIES_LENGTH = int(ENV.get('MAIN_MOVIES_LENGTH', 7))
+
+
 MAX_TAGS_COUNT = 4
+
+DJANGORESIZED_DEFAULT_SIZE = [1920, 1080]
+DJANGORESIZED_DEFAULT_QUALITY = 100
+DJANGORESIZED_DEFAULT_FORCE_FORMAT = 'JPEG'
+DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'JPEG': '.jpg'}
 MAX_IMAGE_UPLOAD_SIZE_MB = 10
 MAX_IMAGE_UPLOAD_SIZE = MAX_IMAGE_UPLOAD_SIZE_MB * 1024 * 1024
 IMAGE_EXTENSIONS = ('jpg', 'jpeg', 'gif', 'png', 'bmp')
@@ -202,18 +216,6 @@ IMAGE_FIELD_HELP_TEXT = _(
 
 
 ADMIN_HONEYPOT_EMAIL_ADMINS = False
-
-
-# Mail Backend
-
-MAIL_API = ENV.get('MAIL_API')
-MAIL_API_KEY = ENV.get('MAIL_API_KEY')
-FROM_MAIL = ENV.get('FROM_MAIL')
-
-
-# Scheduler
-
-APSCHEDULER_DATETIME_FORMAT = 'd.m.Y H:i:s'
 
 
 # Martor settings
@@ -248,6 +250,8 @@ EMAIL_USE_SSL = False
 
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+EMAIL_SEND_TIMEOUT = int(ENV.get('EMAIL_SEND_TIMEOUT', 10))
 
 USER_CREATION_SUBJECT = ENV.get('USER_CREATION_SUBJECT', _('Регистрация на сайте BBBS'))
 USER_CREATION_MESSAGE = ENV.get('USER_CREATION_MESSAGE', _('Вас зарегестрировали на сайте BBBS. Используйте логин %s и пароль %s для входа на сайт.'))

@@ -44,12 +44,11 @@ django-phonenumber-field = {extras = ["phonenumberslite"], version = "*"}
 babel = "*"
 psycopg2-binary = "*"
 django-cron = "*"
+django-resized = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-django = "*"
-django-extensions = "*"
-Werkzeug = "*"
 
 [requires]
 python_version = "3.9"

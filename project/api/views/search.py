@@ -42,7 +42,7 @@ class SearchView(GenericViewSet, ListModelMixin):
 
     def get_queryset(self):
         user = self.request.user
-        city_filter = {}
+        city_filter = {'city': self.request.GET.get('city')}
         resource_filter = {}
         if user.is_authenticated:
             city_filter['city'] = user.city
@@ -53,7 +53,8 @@ class SearchView(GenericViewSet, ListModelMixin):
             Event.objects.filter(
                 **city_filter,
                 end_at__gt=now(),
-                canceled=False
+                canceled=False,
+                id__isnull=not user.is_authenticated
             ),
             Place.objects.filter(moderation_flag=True, **city_filter),
             Book.objects.all(),

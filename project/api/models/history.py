@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_resized import ResizedImageField
 from martor.models import MartorField
 
 from ..validators import file_size_validator, image_extension_validator
@@ -27,11 +28,13 @@ class History(models.Model, ImageFromUrlMixin):
     together_since = models.DateField(
         verbose_name=_('Вместе с'),
     )
-    image = models.ImageField(
+    image = ResizedImageField(
         verbose_name=_('Изображение'),
         upload_to='history/',
         blank=True,
         null=True,
+        size=[1280, 720],
+        crop=['middle', 'center'],
         help_text=settings.IMAGE_FIELD_HELP_TEXT,
         validators=[file_size_validator, image_extension_validator],
     )

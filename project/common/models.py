@@ -1,14 +1,17 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_resized import ResizedImageField
 
 from .validators import file_size_validator, image_extension_validator
 
 
 class Image(models.Model):
-    image = models.ImageField(
+    image = ResizedImageField(
         upload_to='images/',
         verbose_name=_('Изображение'),
+        size=[1280, 720],
+        crop=['middle', 'center'],
         help_text=settings.IMAGE_FIELD_HELP_TEXT,
         validators=[file_size_validator, image_extension_validator],
     )

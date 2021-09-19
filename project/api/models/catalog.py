@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_resized import ResizedImageField
 from martor.models import MartorField
 
 from ..validators import file_size_validator, image_extension_validator
@@ -19,11 +20,13 @@ class Catalog(models.Model, ImageFromUrlMixin):
             'Отображается над изображением.'
         ),
     )
-    image = models.ImageField(
+    image = ResizedImageField(
         upload_to='catalog/',
         verbose_name=_('Изображение'),
         blank=True,
         null=True,
+        size=[1280, 720],
+        crop=['middle', 'center'],
         help_text=settings.IMAGE_FIELD_HELP_TEXT,
         validators=[file_size_validator, image_extension_validator],
     )
