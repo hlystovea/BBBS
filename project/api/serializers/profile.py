@@ -16,7 +16,3 @@ class MentorSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['first_name', 'email']
         model = User
-
-
-class EmailSerializer(serializers.Serializer):
-    email = serializers.EmailField()

@@ -96,8 +96,6 @@ class EventReminder(CronJobBase):
                     )
                 except SMTPException:
                     pass
-                except Exception as error:
-                    print(error)
                 else:
                     EventMailing.objects.create(
                         event=participant.event,
